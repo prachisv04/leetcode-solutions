@@ -1,7 +1,6 @@
 package top_interview_150;
 
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 public class RansomeNote {
 	
