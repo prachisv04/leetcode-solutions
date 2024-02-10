@@ -1,5 +1,9 @@
 package top_interview_150;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Three_sum {
 	public List<List<Integer>> threeSum(int[] nums) {
         List<List<Integer>> ans = new ArrayList<>();
