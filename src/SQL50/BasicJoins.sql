@@ -46,3 +46,16 @@ Subjects SUB LEFT JOIN Examinations E ON
 S.student_id = E.student_id AND SUB.subject_name = E.subject_name  
 GROUP BY S.student_id, S.student_name,SUB.subject_name ORDER BY 
 S.student_id, SUB.subject_name;
+
+-- 570. Managers with at Least 5 Direct Reports
+SELECT E.name FROM EMPLOYEE E 
+LEFT JOIN EMPLOYEE EM 
+ON E.id = EM.managerId
+group by EM.managerId
+having count(EM.id) >=5 ;
+
+-- 1934. Confirmation Rate
+select S.user_id , round(avg(if(C.action="confirmed",1,0)),2) as confirmation_rate
+from Signups S left join Confirmations C
+on S.user_id = C.user_id
+group by user_id;
