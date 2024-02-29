@@ -46,3 +46,25 @@ select product_id, new_price as price from Products where (product_id,change_dat
 in (select product_id , max(change_date) as date from Products where change_date <='2019-08-16' 
 group by product_id)
 
+
+-- 1204. Last Person to fit in Bus
+with cte as (
+    select person_id , person_name , weight ,
+    sum(weight) over(order by turn) as rolling_sum
+    from Queue
+)
+select person_name from cte where rolling_sum <=1000 order by rolling_sum desc limit 1;
+
+-- 1907. Count Salary Categories
+(select 
+"Low Salary" as category,
+(select count(*)  from Accounts where income < 20000) as accounts_count)
+union all
+(select 
+"Average Salary" as category,
+(select count(*) from Accounts where income >= 20000 and income <= 50000) as accounts_count)
+union all 
+(select 
+"High Salary" as category,
+(select count(*) from Accounts where income > 50000) as accounts_count)
+
