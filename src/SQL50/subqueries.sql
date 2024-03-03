@@ -35,4 +35,66 @@ select mrt.title Results from (
     order by rating desc, m.title asc limit 1
 ) mrt
 
--- 
+-- 1321. Restaurant Growth
+WITH Each_Day AS (
+    SELECT
+        visited_on,
+        SUM(amount) amount
+    FROM
+        Customer
+    GROUP BY
+        visited_on
+)
+
+SELECT 
+    c1.visited_on,
+    SUM(c2.amount) amount,
+    ROUND(AVG(c2.amount), 2) average_amount
+FROM
+    Each_Day AS c1
+JOIN
+    Each_Day AS c2 ON 
+        c2.visited_on <= c1.visited_on AND
+        DATEDIFF(c1.visited_on, c2.visited_on) < 7
+GROUP BY
+    c1.visited_on
+HAVING
+    COUNT(*) = 7
+ORDER BY
+    visited_on ASC;
+
+-- 602. Friend Requests II: Who Has the Most Friends
+with base as(
+select requester_id id from RequestAccepted
+union all
+select accepter_id id from RequestAccepted
+)
+select id, count(*) num from base group by id order by num desc limit 1;
+
+-- 585. Investments in 2016
+SELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016
+FROM Insurance
+WHERE tiv_2015 IN (
+    SELECT tiv_2015
+    FROM Insurance
+    GROUP BY tiv_2015
+    HAVING COUNT(*) > 1
+)
+AND (lat, lon) IN (
+    SELECT lat, lon
+    FROM Insurance
+    GROUP BY lat, lon
+    HAVING COUNT(*) = 1
+)
+
+-- 185. Department Top Three Salaries
+with report as (
+select departmentId, name ,Salary,
+DENSE_RANK() over(partition by departmentId order by salary desc ) as rowNum
+from Employee
+)
+select D.name as Department, R.name as Employee, R.salary as Salary
+from report R , Department D
+where R.departmentId = D.id and R.rowNum <=3
+order by Salary desc;
+
